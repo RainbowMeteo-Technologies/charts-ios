@@ -730,14 +730,15 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             }
             else if self.isHighlightPerDragEnabled
             {
+                let offset = _outerScrollView?.contentOffset
                 // We will only handle highlights on NSUIGestureRecognizerState.Changed
                 
                 _isDragging = false
                 
                 // Prevent the parent scroll view from scrolling
                 _outerScrollView?.nsuiIsScrollEnabled = false
-                
-                if let offset = _outerScrollView?.contentOffset {
+
+                if let offset {
                     _outerScrollView?.contentOffset = offset
                 }
             }
