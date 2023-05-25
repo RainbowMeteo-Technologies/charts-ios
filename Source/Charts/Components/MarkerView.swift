@@ -20,6 +20,7 @@ import AppKit
 open class MarkerView: NSUIView, Marker
 {
     open var offset: CGPoint = CGPoint()
+    open var size: CGSize { .zero }
     
     @objc open weak var chartView: ChartViewBase?
     

@@ -19,6 +19,9 @@ public protocol Marker: AnyObject
     /// By returning x: -(width / 2) you will center the IMarker horizontally.
     /// By returning y: -(height / 2) you will center the IMarker vertically.
     var offset: CGPoint { get }
+
+    /// - Returns: The size of marker content.
+    var size: CGSize { get }
     
     /// - Parameters:
     ///   - point: This is the point at which the marker wants to be drawn. You can adjust the offset conditionally based on this argument.
@@ -36,4 +39,16 @@ public protocol Marker: AnyObject
     
     /// Draws the Marker on the given position on the given context
     func draw(context: CGContext, point: CGPoint)
+}
+
+extension Marker {
+    // must be called after content is refreshed for the current highlight
+    func frame(atPoint point: CGPoint) -> CGRect {
+        let offset = offsetForDrawing(atPoint: point)
+        let origin = CGPoint(
+            x: point.x + offset.x,
+            y: point.y + offset.y
+        )
+        return CGRect(origin: origin, size: size)
+    }
 }
