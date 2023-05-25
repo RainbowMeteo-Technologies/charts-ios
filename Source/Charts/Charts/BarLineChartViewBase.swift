@@ -738,6 +738,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
                 // Prevent the parent scroll view from scrolling
                 _outerScrollView?.nsuiIsScrollEnabled = false
 
+                // We apply the offset to a scrollView to avoid occuring jitters and loosing progress of a currently scrolled part within its parent
                 if let offset {
                     _outerScrollView?.contentOffset = offset
                 }
