@@ -28,6 +28,10 @@ open class ChartHighlighter : NSObject, Highlighter
         let xVal = Double(getValsForTouch(x: x, y: y).x)
         return getHighlight(xValue: xVal, x: x, y: y)
     }
+
+    open func getTapHighlight(x: CGFloat, y: CGFloat) -> Highlight? {
+        getHighlight(x: x, y: y)
+    }
     
     /// - Parameters:
     ///   - x:

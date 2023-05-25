@@ -321,6 +321,14 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
 
     // MARK: - Highlighting
 
+    /// Set this to false if you don't want your highlight is deleted when users double tap on it
+    /// **default**: true
+    @objc open var enableErasingHighlightOnDoubleTap: Bool = true
+
+    /// Set this to false if you don't want your highlight is deleted when users double tap on it
+    /// **default**: true
+    @objc open var enableErasingHighlightIfNoHighlightForTap: Bool = true
+
     /// Set this to false to prevent values from being highlighted by tap gesture.
     /// Values can still be highlighted via drag or programmatically.
     /// **default**: true

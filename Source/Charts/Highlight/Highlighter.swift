@@ -20,4 +20,10 @@ public protocol Highlighter: AnyObject
     ///   - y:
     /// - Returns: A Highlight object corresponding to the given x- and y- touch positions in pixels.
     func getHighlight(x: CGFloat, y: CGFloat) -> Highlight?
+
+    /// - Parameters:
+    ///   - x:
+    ///   - y:
+    /// - Returns: A Highlight object corresponding to the given x- and y- touch positions in pixels for tap
+    func getTapHighlight(x: CGFloat, y: CGFloat) -> Highlight?
 }
