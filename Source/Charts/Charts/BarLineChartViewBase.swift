@@ -515,7 +515,8 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         case x
         case y
     }
-    
+
+    private var _inMarkerDragBeganHighlightPointX: CGFloat?
     private var _isDragging = false
     private var _isScaling = false
     private var _gestureScaleAxis = GestureScaleAxis.both
@@ -730,6 +731,20 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             }
             else if self.isHighlightPerDragEnabled
             {
+                if
+                    let marker,
+                    let lastHighlighted = highlighted.first,
+                    let data,
+                    let lastHighlightedEntry = data.entry(for: lastHighlighted)
+                {
+                    let lastHighlightedPoint = getTransformer(forAxis: .left).pixelForValues(x: lastHighlightedEntry.x, y: lastHighlightedEntry.y)
+                    let markerFrame = marker.frame(atPoint: lastHighlightedPoint)
+                    let isInMarker = markerFrame.contains(recognizer.location(in: self))
+                    _inMarkerDragBeganHighlightPointX  = isInMarker ? lastHighlightedPoint.x : nil
+                } else {
+                    _inMarkerDragBeganHighlightPointX  = nil
+                }
+
                 let offset = _outerScrollView?.contentOffset
                 // We will only handle highlights on NSUIGestureRecognizerState.Changed
                 
@@ -766,7 +781,16 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             }
             else if isHighlightPerDragEnabled
             {
-                let h = getHighlightByTouchPoint(recognizer.location(in: self))
+                let targetPointForHighlighted: CGPoint = {
+                    if let _inMarkerDragBeganHighlightPointX {
+                        let targetXForNextHighlighted = _inMarkerDragBeganHighlightPointX + recognizer.translation(in: self).x
+                        return CGPoint(x: targetXForNextHighlighted, y: recognizer.location(in: self).y)
+                    } else {
+                        return recognizer.location(in: self)
+                    }
+                }()
+
+                let h = getHighlightByTouchPoint(targetPointForHighlighted)
                 
                 let lastHighlighted = self.lastHighlighted
                 
