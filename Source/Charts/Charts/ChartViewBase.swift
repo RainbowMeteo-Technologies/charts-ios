@@ -325,7 +325,7 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
     /// **default**: true
     @objc open var enableErasingHighlightOnDoubleTap: Bool = true
 
-    /// Set this to false if you don't want your highlight is deleted when users double tap on it
+    /// Set this to false if you don't want your highlight erases when next tap doesn't lead to anything to be highlighted, i.e. chart doesn't break lastHighlighted
     /// **default**: true
     @objc open var enableErasingHighlightIfNoHighlightForTap: Bool = true
 
