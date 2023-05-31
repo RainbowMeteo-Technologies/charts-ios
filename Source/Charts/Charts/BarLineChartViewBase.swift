@@ -550,7 +550,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             } else if h === nil || (h == self.lastHighlighted && enableErasingHighlightOnDoubleTap)
             {
                 lastHighlighted = nil
-                highlightValue(nil, callDelegate: true)
+                highlightValue(nil, callDelegate: true, selectionSource: .tap)
             }
             else if (h == self.lastHighlighted && !enableErasingHighlightOnDoubleTap)
             {
@@ -559,7 +559,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             else
             {
                 lastHighlighted = h
-                highlightValue(h, callDelegate: true)
+                highlightValue(h, callDelegate: true, selectionSource: .tap)
             }
         }
     }
@@ -694,6 +694,8 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             { // If we have no data, we have nothing to pan and no data to highlight
                 return
             }
+
+            delegate?.chartViewDidStartPanning?(self)
             
             // If drag is enabled and we are in a position where there's something to drag:
             //  * If we're zoomed in, then obviously we have something to drag.
@@ -805,7 +807,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
                 if h != lastHighlighted
                 {
                     self.lastHighlighted = h
-                    self.highlightValue(h, callDelegate: true)
+                    self.highlightValue(h, callDelegate: true, selectionSource: .drag)
                 }
             }
         }
