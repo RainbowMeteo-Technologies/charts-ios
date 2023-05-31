@@ -18,6 +18,13 @@ import CoreGraphics
 #endif
 
 @objc
+public enum ChartHighlightSelectionSource: Int, Equatable {
+    case tap
+    case drag
+    case programatically
+}
+
+@objc
 public protocol ChartViewDelegate
 {
     /// Called when a value has been selected inside the chart.
@@ -25,7 +32,10 @@ public protocol ChartViewDelegate
     /// - Parameters:
     ///   - entry: The selected Entry.
     ///   - highlight: The corresponding highlight object that contains information about the highlighted position such as dataSetIndex etc.
-    @objc optional func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight)
+    @objc optional func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight, selectionSource: ChartHighlightSelectionSource)
+
+    /// Called when a user starts  panning between values on the chart
+    @objc optional func chartViewDidStartPanning(_ chartView: ChartViewBase)
     
     /// Called when a user stops panning between values on the chart
     @objc optional func chartViewDidEndPanning(_ chartView: ChartViewBase)
@@ -443,6 +453,12 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
     /// Highlights the value selected by touch gesture.
     @objc open func highlightValue(_ highlight: Highlight?, callDelegate: Bool)
     {
+        highlightValue(highlight, callDelegate: callDelegate, selectionSource: .programatically)
+    }
+
+    /// Highlights the value selected by touch gesture.
+    @objc internal func highlightValue(_ highlight: Highlight?, callDelegate: Bool, selectionSource: ChartHighlightSelectionSource)
+    {
         var high = highlight
         guard
             let h = high,
@@ -465,7 +481,7 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
         if callDelegate
         {
             // notify the listener
-            delegate?.chartValueSelected?(self, entry: entry, highlight: h)
+            delegate?.chartValueSelected?(self, entry: entry, highlight: h, selectionSource: selectionSource)
         }
 
         // redraw the chart
